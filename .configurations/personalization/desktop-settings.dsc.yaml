@@ -1,0 +1,78 @@
+# yaml-language-server: $schema=https://aka.ms/configuration-dsc-schema/0.2
+properties:
+  resources:
+    - resource: PSDscResources/Registry
+      id: set-desktop-background-solid
+      directives:
+        description: Set desktop background to solid color
+        allowPrerelease: true
+      settings:
+        Key: 'HKEY_CURRENT_USER\Control Panel\Desktop'
+        valuename: WallPaper
+        valuedata: ""
+        valuetype: String
+        force: true
+        Ensure: Present
+
+    - resource: PSDscResources/Script
+      id: refresh-desktop-background
+      directives:
+        allowPrerelease: true
+      settings:
+        SetScript: "RUNDLL32.EXE USER32.DLL,UpdatePerUserSystemParameters ,1 ,True"
+        TestScript: "$false"
+        GetScript: "$false"
+
+    - resource: Microsoft.Windows.Developer/WindowsExplorer
+      id: show-file-extensions
+      directives:
+        description: Show File Extensions
+        allowPrerelease: true
+      settings:
+        FileExtensions: Show
+
+    - resource: Microsoft.Windows.Developer/TaskBar
+      id: hide-search-box
+      directives:
+        description: Hide search box
+        allowPrerelease: true
+      settings:
+        SearchBoxMode: Hide
+        WidgetsButton: Hide
+
+    - resource: Microsoft.Windows.Developer/EnableDarkMode
+      id: enable-dark-mode
+      directives:
+        description: Enable Dark Mode
+        allowPrerelease: true
+      settings:
+        Ensure: Present
+        RestartExplorer: true
+
+    - resource: PSDscResources/Registry
+      id: set-windows-terminal-as-default-console-1
+      directives:
+        description: Set Windows Terminal as the default console part 1
+        allowPrerelease: true
+      settings:
+        Key: HKEY_CURRENT_USER\Console\%%Startup
+        ValueName: DelegationConsole
+        ValueData: "{2EACA947-7F5F-4CFA-BA87-8F7FBEEFBE69}"
+        ValueType: String
+        Force: true
+        Ensure: Present
+
+    - resource: PSDscResources/Registry
+      id: set-windows-terminal-as-default-console-2
+      directives:
+        description: Set Windows Terminal as the default console part 2
+        allowPrerelease: true
+      settings:
+        Key: HKEY_CURRENT_USER\Console\%%Startup
+        valuename: DelegationTerminal
+        valuedata: "{E12CFF52-A866-4C77-9A90-F570A7AA2C6B}"
+        valuetype: String
+        force: true
+        Ensure: Present
+
+  configurationVersion: 0.2.0
