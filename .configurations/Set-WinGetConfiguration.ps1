@@ -10,10 +10,10 @@ installers required because of gaps or bugs in winget or DSC packages, and it ap
 File path to the yaml configuration file to be applied by winget.
 
 .EXAMPLE
-Set-WinGetConfiguration.ps1 -ConfigFilePath ".\configuration.dsc.yaml"
+Set-WinGetConfiguration.ps1 -YamlConfigFilePath ".\radius.dsc.yaml"
 #>
 param (
-    [string]$YamlConfigFilePath = "$PSScriptRoot\configuration.dsc.yaml",
+    [string]$YamlConfigFilePath = "$PSScriptRoot\radius.dsc.yaml",
 
     [bool]$validateFirst = $false
 )
