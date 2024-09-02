@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Description: Installs and configures tools for WSL.
+# Usage: ./wsl-setup.sh
+
 sudo apt-get update && sudo apt-get dist-upgrade -y
 
 # install latest git
@@ -8,7 +11,6 @@ sudo apt update
 sudo apt install git -y
 
 # install GitHub CLI
-# sudo apt-install gh
 (type -p wget >/dev/null || (sudo apt update && sudo apt-get install wget -y)) \
 && sudo mkdir -p -m 755 /etc/apt/keyrings \
 && wget -qO- https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null \
@@ -19,6 +21,9 @@ sudo apt install git -y
 
 # Azure CLI: https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-linux
 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+# Kubelogin for AAD auth to AKS: https://azure.github.io/kubelogin/install.html
+sudo az aks install-cli
 
 # WSL Utilities
 sudo apt install wslu -y
