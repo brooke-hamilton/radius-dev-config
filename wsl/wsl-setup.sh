@@ -36,5 +36,5 @@ sudo snap install --classic helm
 # distro and importing it as another distro on the same machine.
 if ! grep -q "\[user\]" /etc/wsl.conf; then
     # Append the "[user]" setting to /etc/wsl.conf
-    echo -e "\n[user]\n$(whoami)" | sudo tee -a /etc/wsl.conf > /dev/null
+    echo -e "\n[user]\ndefault=$(whoami)" | sudo tee -a /etc/wsl.conf > /dev/null
 fi

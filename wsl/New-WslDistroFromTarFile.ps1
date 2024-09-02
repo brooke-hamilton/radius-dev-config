@@ -34,6 +34,3 @@ if (-not $InstallPath) {
 # Create a new WSL instance from the tar file
 Write-Host "Creating new WSL instance named $NewDistroName from tar file $TarFilePath at $InstallPath..."
 wsl --import $NewDistroName $InstallPath $TarFilePath
-
-# Write out the contents of the /etc/wsl.conf file
-Get-Content -Path "\\wsl$\$NewDistroName\etc\wsl.conf"
