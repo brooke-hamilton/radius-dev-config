@@ -4,10 +4,13 @@ This repo contains general dev machine setup resources for developing [Radius](h
 
 Contents:
 
+`.configurations` folder:
 - WinGet DSC configurations (for Radius)
 - WinGet DSC configurations for personal settings (example)
+
+`wsl` folder:
 - WSL setup script (for Radius)
-- WSL config file (example)
+- WSL configuration for git
 
 ## Prerequisites
 
