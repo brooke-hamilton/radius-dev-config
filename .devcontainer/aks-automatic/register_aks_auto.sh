@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Description: Configures the az CLI to enable AKS Automatic.
+# Description: Registers the AKS Automatic features in the Azure CLI.
 # See https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-automatic-deploy?pivots=azure-cli
 # Usage: ./install_aks_auto.sh
 
@@ -28,3 +28,4 @@ while [[ $(az feature show --namespace Microsoft.ContainerService --name Automat
 done
 
 az provider register --namespace Microsoft.ContainerService
+echo "Azure provider registered"
