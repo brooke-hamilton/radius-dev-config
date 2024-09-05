@@ -23,7 +23,12 @@ fi
 
 echo "AKS Automatic feature is registered"
 
+#location="southcentralus"
+location="eastus2"
 cluster_name=$(mktemp -u "$resource_group-XXXX")
 echo "Creating cluster $cluster_name"
-az aks create --resource-group "$resource_group" --name "$cluster_name" --sku automatic --generate-ssh-keys -l southcentralus 
+az aks create --resource-group "$resource_group" --name "$cluster_name" --sku automatic --generate-ssh-keys -l $location 
+az_user=$(az account show --query user.name -o tsv)
 az aks get-credentials --resource-group "$resource_group" --name "$cluster_name"
+#az role assignment create --role "Azure Kubernetes Service RBAC Cluster Admin" --assignee "$az_user" --scope $AKS_ID
+#kubectl get events -A --field-selector source=karpenter -w

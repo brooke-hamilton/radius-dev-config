@@ -12,6 +12,11 @@ if ! az account show &> /dev/null; then
     exit 1
 fi
 
+# Install kubelogin if not already installed.
+if ! command -v kubelogin &> /dev/null; then
+    sudo az aks install-cli
+fi
+
 az extension add --name aks-preview
 az feature register --namespace Microsoft.ContainerService --name EnableAPIServerVnetIntegrationPreview
 az feature register --namespace Microsoft.ContainerService --name NRGLockdownPreview
@@ -23,8 +28,8 @@ az feature show --namespace Microsoft.ContainerService --name AutomaticSKUPrevie
 
 # Wait until all features have finished registering
 while [[ $(az feature show --namespace Microsoft.ContainerService --name AutomaticSKUPreview --query 'properties.state') == '"Registering"' ]]; do
-    sleep 5
     echo "Registering"
+    sleep 5
 done
 
 az provider register --namespace Microsoft.ContainerService
