@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+# Description: Bootstraps a new GitHub repository with Flux and deploys the podinfo app.
+# The script follows the steps at https://fluxcd.io/flux/get-started/
+# Usage: ./bootstrap_flux_cluster.sh <repository name>
+
 if [ $# -ne 1 ]; then
     echo "Usage: $0 <repository name>"
     exit 1
