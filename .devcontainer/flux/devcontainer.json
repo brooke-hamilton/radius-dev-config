@@ -1,11 +1,9 @@
 // For format details, see https://aka.ms/devcontainer.json.
 {
-	"name": "AKS-Automatic testing",
+	"name": "flux",
 	"image": "mcr.microsoft.com/devcontainers/base:ubuntu",
 	"features": {
-		"ghcr.io/devcontainers/features/azure-cli:1": {
-			"extensions": "aks-preview, k8s-extension"
-		},
+		
 		"ghcr.io/devcontainers/features/github-cli:1": {},
 		"ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
 			"minikube": "none"

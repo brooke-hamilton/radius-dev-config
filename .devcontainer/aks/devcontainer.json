@@ -11,7 +11,7 @@
 			"minikube": "none"
 		},
 		"ghcr.io/dapr/cli/dapr-cli:0": {},
-		"../radius-feature": {}
+		"../features/radius": {}
 	},
 	"customizations": {
 		"vscode": {
