@@ -12,7 +12,8 @@
 			"minikube": "none"
 		},
 		"ghcr.io/rio/features/k3d:1": {},
-		"ghcr.io/dapr/cli/dapr-cli:0": {}
+		"ghcr.io/dapr/cli/dapr-cli:0": {},
+		"../radius-feature": {}
 	},
 	"customizations": {
 		"vscode": {
@@ -28,8 +29,6 @@
 			]
 		}
 	},
-	// Install Radius
-	"onCreateCommand": "wget -q \"https://raw.githubusercontent.com/radius-project/radius/main/deploy/install.sh\" -O - | /bin/bash",
 	// Mount the GitHub CLI configuration
 	"mounts": [
 		"source=${localEnv:HOME}/.config/gh,target=/home/vscode/.config/gh,type=bind"
