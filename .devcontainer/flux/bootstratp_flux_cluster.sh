@@ -12,6 +12,12 @@ fi
 
 repo_name=$1
 
+# Validate script is being run from its own folder
+if [ "$(dirname "$0")" != "." ]; then
+    echo "Please run the script from its own folder."
+    exit 1
+fi
+
 # Check if logged into GitHub CLI
 if ! gh auth status >/dev/null 2>&1; then
     echo "Please log into GitHub CLI using 'gh auth login'"
