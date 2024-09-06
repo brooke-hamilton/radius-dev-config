@@ -1,0 +1,7 @@
+{
+    "id": "flux",
+    "version": "1.0.0",
+    "name": "flux",
+    "description": "Installs flux.",
+    "options": {}
+}
