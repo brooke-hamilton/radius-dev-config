@@ -40,8 +40,8 @@ cd .notes
 
 # Clone the repo (remove the repo first if it already exists).
 if [ -d "$repo_name" ]; then
-    echo "Pulling latest from $repo_name repo."
-    git -C ./$repo_name/ pull
+    echo "Repo already exists. Start with an empty repo."
+    exit 1
 else
     echo "Cloning $repo_name repo."
     git clone https://github.com/$GITHUB_USER/$repo_name
@@ -56,13 +56,8 @@ flux create source git podinfo \
   --interval=1m \
   --export > ./clusters/my-cluster/podinfo-source.yaml
 
-# Commit any changes in the git repository
-if ! git diff --quiet; then
-    git add -A && git commit -m "Add podinfo GitRepository"
-    git push
-else
-    echo "No changes to commit for ./clusters/my-cluster/podinfo-source.yaml"
-fi
+git add -A && git commit -m "Add podinfo GitRepository"
+git push
 
 # Create a kustomization that deploys the podinfo app.
 flux create kustomization podinfo \
@@ -76,12 +71,7 @@ flux create kustomization podinfo \
   --health-check-timeout=3m \
   --export > ./clusters/my-cluster/podinfo-kustomization.yaml
 
-if ! git diff --quiet; then
-    git add -A && git commit -m "Add podinfo Kustomization"
-    git push
-else
-    echo "No changes to commit for ./clusters/my-cluster/podinfo-kustomization.yaml"
-fi
+git add -A && git commit -m "Add podinfo Kustomization"
+git push
 
-flux get kustomizations
-kubectl -n default get deployments,services
+flux get kustomizations -w
