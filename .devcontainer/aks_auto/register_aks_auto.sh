@@ -2,7 +2,7 @@
 
 # Description: Registers the AKS Automatic features in the Azure CLI.
 # See https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-automatic-deploy?pivots=azure-cli
-# Usage: ./install_aks_auto.sh
+# Usage: ./register_aks_auto.sh
 
 set -e
 
