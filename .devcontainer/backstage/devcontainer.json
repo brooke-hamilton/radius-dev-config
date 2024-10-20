@@ -11,6 +11,22 @@
     "ghcr.io/devcontainers/features/docker-in-docker:2": {
       "version": "latest",
       "moby": true
+    },
+    "ghcr.io/dapr/cli/dapr-cli:0": {},
+    "../features/radius": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "GitHub.copilot",
+        "GitHub.copilot-chat",
+        "davidanson.vscode-markdownlint",
+        "ms-azuretools.vscode-bicep",
+        "ms-kubernetes-tools.vscode-kubernetes-tools",
+        "ms-azuretools.vscode-dapr",
+        "redhat.vscode-yaml",
+        "timonwong.shellcheck"
+      ]
     }
   },
   "forwardPorts": [3000, 7007]
