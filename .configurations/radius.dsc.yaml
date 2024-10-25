@@ -50,6 +50,14 @@ properties:
         source: winget
 
     - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: visual-studio-enterprise-2022
+      directives:
+        allowPrerelease: true
+      settings:
+        id: "Microsoft.VisualStudio.2022.Enterprise"
+        source: winget
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
       id: wsl
       directives:
         allowPrerelease: true
