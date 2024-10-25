@@ -18,6 +18,38 @@ properties:
         source: winget
 
     - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: dotnetsdk-6
+      directives:
+        allowPrerelease: true
+      settings:
+        id: "Microsoft.DotNet.SDK.6"
+        source: winget
+    
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: dotnetsdk-7
+      directives:
+        allowPrerelease: true
+      settings:
+        id: "Microsoft.DotNet.SDK.7"
+        source: winget
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: dotnetsdk-8
+      directives:
+        allowPrerelease: true
+      settings:
+        id: "Microsoft.DotNet.SDK.8"
+        source: winget
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: dotnetsdk-9
+      directives:
+        allowPrerelease: true
+      settings:
+        id: "Microsoft.DotNet.SDK.Preview"
+        source: winget
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
       id: wsl
       directives:
         allowPrerelease: true
