@@ -46,6 +46,15 @@ properties:
         Ensure: Present
 
     - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: il-spy
+      directives:
+        allowPrerelease: true
+      settings:
+        id: "icsharpcode.ILSpy"
+        source: winget
+        Ensure: Present
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
       id: install-teams
       directives:
         allowPrerelease: true
