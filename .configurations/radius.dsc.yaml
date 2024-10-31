@@ -26,27 +26,11 @@ properties:
         source: winget
     
     - resource: Microsoft.WinGet.DSC/WinGetPackage
-      id: dotnetsdk-7
-      directives:
-        allowPrerelease: true
-      settings:
-        id: "Microsoft.DotNet.SDK.7"
-        source: winget
-
-    - resource: Microsoft.WinGet.DSC/WinGetPackage
       id: dotnetsdk-8
       directives:
         allowPrerelease: true
       settings:
         id: "Microsoft.DotNet.SDK.8"
-        source: winget
-
-    - resource: Microsoft.WinGet.DSC/WinGetPackage
-      id: dotnetsdk-9
-      directives:
-        allowPrerelease: true
-      settings:
-        id: "Microsoft.DotNet.SDK.Preview"
         source: winget
 
     - resource: Microsoft.WinGet.DSC/WinGetPackage
@@ -56,6 +40,15 @@ properties:
       settings:
         id: "Microsoft.VisualStudio.2022.Enterprise"
         source: winget
+
+    - resource: Microsoft.VisualStudio.DSC/VSComponents
+      id: visual-studio-components
+      directives:
+        allowPrerelease: true
+      settings:
+        ProductId: "Microsoft.VisualStudio.Product.Enterprise"
+        ChannelId: "VisualStudio.17.Release"
+        VSConfigFile: ".vsconfig"
 
     - resource: Microsoft.WinGet.DSC/WinGetPackage
       id: wsl
