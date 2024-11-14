@@ -33,6 +33,7 @@ echo "Setting the user name and email address in git."
 git config --global user.name "$gh_acct_name"
 git config --global user.email "$gh_email"
 git config --global init.defaultBranch main
+git config --global submodule.recurse true
 
 echo "Downgrading the GitHub security scope to default."
 gh auth refresh --hostname github.com --reset-scopes
