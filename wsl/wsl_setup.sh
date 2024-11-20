@@ -20,16 +20,16 @@ sudo apt install git -y
 && sudo apt install gh -y
 
 # Azure CLI: https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-linux
-curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+# curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
 # Kubelogin for AAD auth to AKS: https://azure.github.io/kubelogin/install.html
-sudo az aks install-cli
+# sudo az aks install-cli
 
 # WSL Utilities
 sudo apt install wslu -y
 
 # Helm
-sudo snap install --classic helm
+# sudo snap install --classic helm
 
 # Check if the "[user]" setting already exists in /etc/wsl.conf. If not, add the current user.
 # This setting is not required when installing WSL from the Windows Store, but it is helpful when exporting the

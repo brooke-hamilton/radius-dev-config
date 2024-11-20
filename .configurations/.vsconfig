@@ -82,7 +82,8 @@
     "Microsoft.VisualStudio.Component.DslTools",
     "Component.MDD.Linux",
     "Component.Linux.RemoteFileExplorer",
-    "Microsoft.VisualStudio.Component.Git"
+    "Microsoft.VisualStudio.Component.Git",
+    "Microsoft.VisualStudio.Component.AzureDevOps.OfficeIntegration"
   ],
   "extensions": []
 }
