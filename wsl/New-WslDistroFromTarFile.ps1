@@ -1,10 +1,6 @@
-
 <#
 .SYNOPSIS
-This script performs a specific task.
-
-.DESCRIPTION
-This script is designed to accomplish a specific task. It takes input from the user and performs a series of operations to achieve the desired outcome.
+Creates a new WSL instance from a tar file.
 
 .PARAMETER NewDistroName
 The name of the distro that will appear in the list of WSL instances.
