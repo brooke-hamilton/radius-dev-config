@@ -100,8 +100,10 @@ if (-not $WslInstanceName) {
 $wslInstancePath = "c:\wsl\$containerName"
 
 # Export the container to a tar file
+# ToDo: Move to a function
 Write-Host "Importing WSL instance $WslInstanceName from container $containerId to $wslInstancePath ..."
 docker export "$containerId" | wsl --import $WslInstanceName $wslInstancePath -
+docker rm $containerId
 
 Set-UserAccount -wslInstanceName $WslInstanceName -wslUserName $WslUserName
 

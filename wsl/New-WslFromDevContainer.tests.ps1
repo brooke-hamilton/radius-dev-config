@@ -111,7 +111,7 @@ Describe 'New-WslFromDevContainer' {
         { & .\New-WslFromDevContainer -WorkspaceFolder $testDataPath -DevContainerJsonPath 'invalid-path' -WslUserName $null } | Should -Throw $expectedMessage
     }
 
-    It 'Create WSL instance from workspace folder with one devcontainer.json' -Skip {
+    It 'Create WSL instance from workspace folder with one devcontainer.json' {
         # Arrange
         New-DevContainerJsonFile -workspaceFolder $testDataPath -jsonContent (Get-DevContainerJsonContent)
         $wslInstanceName = 'test-container-wsl'
@@ -124,7 +124,7 @@ Describe 'New-WslFromDevContainer' {
         Remove-WslInstance -wslInstanceName $wslInstanceName
     }
 
-    It 'Create WSL instance from workspace folder with multiple devcontainer.json files' -Skip {
+    It 'Create WSL instance from workspace folder with multiple devcontainer.json files' {
         # Arrange
         New-DevContainerJsonFile -workspaceFolder $testDataPath -subfolder 'subfolder1' -jsonContent (Get-DevContainerJsonContent)
         $devContainerJsonPath = New-DevContainerJsonFile -workspaceFolder $testDataPath -subfolder 'subfolder2' -jsonContent (Get-DevContainerJsonContent)
@@ -142,7 +142,7 @@ Describe 'New-WslFromDevContainer' {
         Remove-WslInstance -wslInstanceName $wslInstanceName
     }
 
-    It 'Create WSL instance with default name' -Skip {
+    It 'Create WSL instance with default name' {
         # Arrange
         $devContainerJsonPath = New-DevContainerJsonFile -workspaceFolder $testDataPath -jsonContent (Get-DevContainerJsonContent)
         $wslInstanceName = (Get-Content -Path $devContainerJsonPath -Raw | ConvertFrom-Json).name
