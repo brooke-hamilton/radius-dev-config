@@ -71,6 +71,7 @@ Describe 'New-WslFromDevContainer' {
     }
     AfterEach {
         Get-ChildItem -Path $testDataPath -Recurse | Remove-Item -Recurse -Force
+        #ToDo: Remove WSL instance here instead of in each test
     }
     AfterAll {
         Remove-Item -Path $testDataPath -Recurse -Force
@@ -151,6 +152,21 @@ Describe 'New-WslFromDevContainer' {
         { .\New-WslFromDevContainer -WorkspaceFolder $testDataPath } | Should -Not -Throw
 
         # Assert
+        Assert-WslInstance -wslInstanceName $wslInstanceName
+        Remove-WslInstance -wslInstanceName $wslInstanceName
+    }
+
+    It 'Creating two instances with same name fails' {
+        # Arrange
+        $devContainerJsonPath = New-DevContainerJsonFile -workspaceFolder $testDataPath -jsonContent (Get-DevContainerJsonContent)
+        $wslInstanceName = (Get-Content -Path $devContainerJsonPath -Raw | ConvertFrom-Json).name
+        $expectedMessage = "A WSL instance with the name $wslInstanceName already exists."
+        
+        # Act
+        { .\New-WslFromDevContainer -WorkspaceFolder $testDataPath } | Should -Not -Throw
+        { .\New-WslFromDevContainer -WorkspaceFolder $testDataPath } | Should -Throw `
+            | ForEach-Object { $_.Exception.Message | Should -Contain $expectedMessage }
+
         Assert-WslInstance -wslInstanceName $wslInstanceName
         Remove-WslInstance -wslInstanceName $wslInstanceName
     }

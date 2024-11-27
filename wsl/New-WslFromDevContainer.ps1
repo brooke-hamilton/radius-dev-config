@@ -10,10 +10,10 @@ ToDo: Describe the parameters of this script.
 param (
     [Parameter(Mandatory = $false)]
     [string]$WorkspaceFolder = ".",
-    
+
     [Parameter(Mandatory = $false)]
     [string]$DevContainerJsonPath = $null,
-    
+
     [Parameter(Mandatory = $false)]
     [string]$WslInstanceName = $null,
 
@@ -24,44 +24,60 @@ param (
 Set-StrictMode -Version 3.0
 $ErrorActionPreference = "Stop"
 
+# ToDo: Verify that docker is running
+
 function Find-DevContainerJsonFile {
+    param (
+        [string]$workspaceFolder,
+        [string]$devContainerJsonPath
+    )
     # Find the dev container json file
-    if ($script:DevContainerJsonPath) {
-        if (-not (Test-Path -Path $DevContainerJsonPath -PathType Leaf)) {
+    if ($devContainerJsonPath) {
+        if (-not (Test-Path -Path $devContainerJsonPath -PathType Leaf)) {
             throw "No devcontainer.json file found."
         }
+        return $devContainerJsonPath
     }
     else {
-        [System.IO.FileInfo[]]$devContainerJson = Get-ChildItem -Path $WorkspaceFolder -Filter "devcontainer.json" -Recurse -File
+        [System.IO.FileInfo[]]$devContainerJson = Get-ChildItem -Path $workspaceFolder -Filter "devcontainer.json" -Recurse -File
         if (-not $devContainerJson) {
             throw "No devcontainer.json files found."
         }
         if ($devContainerJson.Length -gt 1) {
             throw "Multiple devcontainer.json files found. Please provide the DevContainerJsonPath parameter."
         }
-        $script:DevContainerJsonPath = $devContainerJson[0]
+        return $devContainerJson[0].FullName
     }
 }
 
 function Get-DevContainerName {
+    param (
+        [string]$devContainerJsonPath
+    )
     # Read the devcontainer.json file
-    $jsonContent = Get-Content -Path $DevContainerJsonPath -Raw | ConvertFrom-Json
+    $jsonContent = Get-Content -Path $devContainerJsonPath -Raw | ConvertFrom-Json
 
     # Get the container name from the json content
     $containerName = $jsonContent.name
 
     if (-not $containerName) {
-        throw "Could not find the name element in $DevContainerJsonPath."
+        throw "Could not find the name element in $devContainerJsonPath."
     }
 
     return $containerName.Replace(" ", "")
 }
 
 function Invoke-ContainerBuild {
-    Write-Host "Building the container image $containerName for $DevContainerJsonPath..."
+    param (
+        [string]$containerName,
+        [string]$containerLabel,
+        [string]$workspaceFolder,
+        [string]$devContainerJsonPath
+    )
+    Write-Host "Building the container image $containerName for $devContainerJsonPath..."
 
     # Build the dev container
-    devcontainer build --workspace-folder="$WorkspaceFolder" --config="$DevContainerJsonPath" --image-name="$containerLabel" | Write-Host
+    devcontainer build --workspace-folder="$workspaceFolder" --config="$devContainerJsonPath" --image-name="$containerLabel" | Write-Host
 
     # Run the dev container - the container will not run in wsl unless exported from a container instance instead of an image
     Write-Host "Running the container image $containerLabel..."
@@ -86,25 +102,60 @@ function Set-UserAccount {
     wsl --distribution $wslInstanceName -- groupmod --new-name $wslUserName vscode
 }
 
-Find-DevContainerJsonFile
-$containerName = Get-DevContainerName
-$containerLabel = $containerName.ToLower()
-$containerId = Invoke-ContainerBuild
-
-# Set WslInstanceName
-if (-not $WslInstanceName) {
-    $WslInstanceName = $containerName
+function Get-WslInstanceName {
+    param (
+        [string]$wslInstanceName,
+        [string]$containerName
+    )
+    if (-not $wslInstanceName) {
+        return $containerName
+    }
+    return $wslInstanceName
 }
 
-# ToDo: Calculate this path
-$wslInstancePath = "c:\wsl\$containerName"
-
-# Export the container to a tar file
 # ToDo: Move to a function
-Write-Host "Importing WSL instance $WslInstanceName from container $containerId to $wslInstancePath ..."
-docker export "$containerId" | wsl --import $WslInstanceName $wslInstancePath -
-docker rm $containerId
+function Get-WslInstanceFilePath {
+    param (
+        [string]$wslInstanceName
+    )
+    return "c:\wsl\$wslInstanceName"
+}
 
+function New-WslInstanceFromContainer {
+    param (
+        [string]$containerId,
+        [string]$wslInstanceName,
+        [string]$wslInstancePath
+    )
+
+    $existingInstances = wsl --list | ForEach-Object { 
+        $existingInstanceName = $_.Trim()
+        if ($existingInstanceName -ieq $wslInstanceName) {
+            throw "A WSL instance with the name $wslInstanceName already exists."
+        }
+    }
+
+    if ($existingInstances -contains $wslInstanceName) {
+        throw "A WSL instance with the name $wslInstanceName already exists."
+    }
+
+    Write-Host "Importing WSL instance $wslInstanceName from container $containerId to $wslInstancePath ..."
+    docker export "$containerId" | wsl --import $wslInstanceName $wslInstancePath -
+    docker rm $containerId
+}
+
+$DevContainerJsonPath = Find-DevContainerJsonFile -workspaceFolder $WorkspaceFolder -devContainerJsonPath $DevContainerJsonPath
+$containerName = Get-DevContainerName -devContainerJsonPath $DevContainerJsonPath
+$containerLabel = $containerName.ToLower()
+$containerId = Invoke-ContainerBuild `
+    -containerName $containerName `
+    -containerLabel $containerLabel `
+    -workspaceFolder $WorkspaceFolder `
+    -devContainerJsonPath $DevContainerJsonPath
+
+$WslInstanceName = Get-WslInstanceName -wslInstanceName $WslInstanceName -containerName $containerName
+$wslInstancePath = Get-WslInstanceFilePath -wslInstanceName $WslInstanceName
+New-WslInstanceFromContainer -containerId $containerId -wslInstanceName $WslInstanceName -wslInstancePath $wslInstancePath
 Set-UserAccount -wslInstanceName $WslInstanceName -wslUserName $WslUserName
 
 # ToDo: Create /etc/wsl.conf file to set the default user
