@@ -20,7 +20,11 @@ param (
 
     [Parameter(Mandatory = $false)]
     [ValidateNotNullOrWhiteSpace()]
-    [string]$WslUserName = $Env:USERNAME
+    [string]$WslUserName = $Env:USERNAME,
+
+    [Parameter(Mandatory = $false)]
+    [ValidateNotNullOrWhiteSpace()]
+    [string]$WslInstancesFolder = (Join-Path -Path $Env:USERPROFILE -ChildPath "wsl")
 )
 
 Set-StrictMode -Version 3.0
@@ -129,9 +133,13 @@ function Get-WslInstanceName {
 
 function Get-WslInstanceFilePath {
     param (
-        [string]$wslInstanceName
+        [string]$wslInstanceName,
+        [string]$wslInstancesFolder
     )
-    return "c:\wsl\$wslInstanceName"
+    if (-not (Test-Path -Path $wslInstancesFolder -PathType Container)) {
+        New-Item -Path $wslInstancesFolder -ItemType Directory | Out-Null
+    }
+    return Join-Path -Path $wslInstancesFolder -ChildPath $wslInstanceName
 }
 
 function New-WslInstanceFromContainer {
@@ -168,7 +176,7 @@ $containerId = Invoke-ContainerBuild `
     -devContainerJsonPath $DevContainerJsonPath
 
 $WslInstanceName = Get-WslInstanceName -wslInstanceName $WslInstanceName -containerName $containerName
-$wslInstancePath = Get-WslInstanceFilePath -wslInstanceName $WslInstanceName
+$wslInstancePath = Get-WslInstanceFilePath -wslInstanceName $WslInstanceName -wslInstancesFolder $WslInstancesFolder
 New-WslInstanceFromContainer -containerId $containerId -wslInstanceName $WslInstanceName -wslInstancePath $wslInstancePath
 Set-UserAccount -wslInstanceName $WslInstanceName -wslUserName $WslUserName
 New-WslConfigFile -wslInstanceName $WslInstanceName -wslUserName $WslUserName
