@@ -129,7 +129,6 @@ Describe 'New-WslFromDevContainer' {
         # Arrange
         New-DevContainerJsonFile -workspaceFolder $testDataPath -subfolder 'subfolder1' -jsonContent (Get-DevContainerJsonContent)
         $devContainerJsonPath = New-DevContainerJsonFile -workspaceFolder $testDataPath -subfolder 'subfolder2' -jsonContent (Get-DevContainerJsonContent)
-        
         $wslInstanceName = 'test-container-wsl'
         
         # Act
@@ -143,7 +142,7 @@ Describe 'New-WslFromDevContainer' {
         Remove-WslInstance -wslInstanceName $wslInstanceName
     }
 
-    It 'Create WSL instance with default name' {
+    It 'Create WSL instance with default name' -Tag 'DefaultCase' {
         # Arrange
         $devContainerJsonPath = New-DevContainerJsonFile -workspaceFolder $testDataPath -jsonContent (Get-DevContainerJsonContent)
         $wslInstanceName = (Get-Content -Path $devContainerJsonPath -Raw | ConvertFrom-Json).name
@@ -156,7 +155,7 @@ Describe 'New-WslFromDevContainer' {
         Remove-WslInstance -wslInstanceName $wslInstanceName
     }
 
-    It 'Creating two instances with same name fails' {
+    It 'Creating two instances with same name fails' -Tag 'TwoInstances' {
         # Arrange
         $devContainerJsonPath = New-DevContainerJsonFile -workspaceFolder $testDataPath -jsonContent (Get-DevContainerJsonContent)
         $wslInstanceName = (Get-Content -Path $devContainerJsonPath -Raw | ConvertFrom-Json).name

@@ -102,6 +102,19 @@ function Set-UserAccount {
     wsl --distribution $wslInstanceName -- groupmod --new-name $wslUserName vscode
 }
 
+function New-WslConfigFile {
+    param (
+        [string]$wslInstanceName,
+        [string]$wslUserName
+    )
+
+    Write-Host "Writing /etc/wsl.conf in $wslInstanceName..."
+    $configFileText = "[boot]`nsystemd=false`n`n[user]`ndefault=$wslUserName`n"
+    $wslCommand = "echo '$configFileText' > /etc/wsl.conf"
+    wsl -d $wslInstanceName -- bash -c "$wslCommand"
+    wsl --terminate $wslInstanceName
+}
+
 function Get-WslInstanceName {
     param (
         [string]$wslInstanceName,
@@ -113,7 +126,6 @@ function Get-WslInstanceName {
     return $wslInstanceName
 }
 
-# ToDo: Move to a function
 function Get-WslInstanceFilePath {
     param (
         [string]$wslInstanceName
@@ -141,7 +153,8 @@ function New-WslInstanceFromContainer {
 
     Write-Host "Importing WSL instance $wslInstanceName from container $containerId to $wslInstancePath ..."
     docker export "$containerId" | wsl --import $wslInstanceName $wslInstancePath -
-    docker rm $containerId
+    Write-Host "Removing container instance $containerId..."
+    docker rm $containerId --force --volumes
 }
 
 $DevContainerJsonPath = Find-DevContainerJsonFile -workspaceFolder $WorkspaceFolder -devContainerJsonPath $DevContainerJsonPath
@@ -157,5 +170,4 @@ $WslInstanceName = Get-WslInstanceName -wslInstanceName $WslInstanceName -contai
 $wslInstancePath = Get-WslInstanceFilePath -wslInstanceName $WslInstanceName
 New-WslInstanceFromContainer -containerId $containerId -wslInstanceName $WslInstanceName -wslInstancePath $wslInstancePath
 Set-UserAccount -wslInstanceName $WslInstanceName -wslUserName $WslUserName
-
-# ToDo: Create /etc/wsl.conf file to set the default user
+New-WslConfigFile -wslInstanceName $WslInstanceName -wslUserName $WslUserName
