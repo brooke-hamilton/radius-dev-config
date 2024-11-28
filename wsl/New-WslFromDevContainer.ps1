@@ -7,6 +7,7 @@ ToDo: Describe the purpose of this script.
 ToDo: Describe the parameters of this script.
 #>
 
+[CmdletBinding()]
 param (
     [Parameter(Mandatory = $false)]
     [string]$WorkspaceFolder = ".",
@@ -21,10 +22,9 @@ param (
     [ValidateNotNullOrWhiteSpace()]
     [string]$WslUserName = $Env:USERNAME
 )
+
 Set-StrictMode -Version 3.0
 $ErrorActionPreference = "Stop"
-
-# ToDo: Verify that docker is running
 
 function Find-DevContainerJsonFile {
     param (
@@ -74,21 +74,22 @@ function Invoke-ContainerBuild {
         [string]$workspaceFolder,
         [string]$devContainerJsonPath
     )
-    Write-Host "Building the container image $containerName for $devContainerJsonPath..."
+    Write-Verbose -Message "Building the container image $containerName for $devContainerJsonPath..."
 
     # Build the dev container
-    devcontainer build --workspace-folder="$workspaceFolder" --config="$devContainerJsonPath" --image-name="$containerLabel" | Write-Host
+    devcontainer build --workspace-folder="$workspaceFolder" --config="$devContainerJsonPath" --image-name="$containerLabel" `
+        | Write-Verbose
 
     # Run the dev container - the container will not run in wsl unless exported from a container instance instead of an image
-    Write-Host "Running the container image $containerLabel..."
-    docker run $containerLabel | Write-Host
+    Write-Verbose -Message "Running the container image $containerLabel..."
+    docker run $containerLabel | Write-Verbose
 
     $containerId = docker ps --latest --quiet
     if (-not $containerId) {
         throw "Could not find the container id."
     }
 
-    Write-Host "Ran container $containerId"
+    Write-Verbose "Ran container $containerId"
     return $containerId
 }
 
@@ -108,11 +109,11 @@ function New-WslConfigFile {
         [string]$wslUserName
     )
 
-    Write-Host "Writing /etc/wsl.conf in $wslInstanceName..."
+    Write-Verbose -Message "Writing /etc/wsl.conf in $wslInstanceName..."
     $configFileText = "[boot]`nsystemd=false`n`n[user]`ndefault=$wslUserName`n"
     $wslCommand = "echo '$configFileText' > /etc/wsl.conf"
-    wsl -d $wslInstanceName -- bash -c "$wslCommand"
-    wsl --terminate $wslInstanceName
+    wsl -d $wslInstanceName -- bash -c "$wslCommand" | Write-Verbose
+    wsl --terminate $wslInstanceName | Write-Verbose
 }
 
 function Get-WslInstanceName {
@@ -151,10 +152,10 @@ function New-WslInstanceFromContainer {
         throw "A WSL instance with the name $wslInstanceName already exists."
     }
 
-    Write-Host "Importing WSL instance $wslInstanceName from container $containerId to $wslInstancePath ..."
-    docker export "$containerId" | wsl --import $wslInstanceName $wslInstancePath -
-    Write-Host "Removing container instance $containerId..."
-    docker rm $containerId --force --volumes
+    Write-Verbose -Message "Importing WSL instance $wslInstanceName from container $containerId to $wslInstancePath ..."
+    docker export "$containerId" | wsl --import $wslInstanceName $wslInstancePath - | Write-Verbose
+    Write-Verbose -Message "Removing container instance $containerId..."
+    docker rm $containerId --force --volumes | Write-Verbose
 }
 
 $DevContainerJsonPath = Find-DevContainerJsonFile -workspaceFolder $WorkspaceFolder -devContainerJsonPath $DevContainerJsonPath
