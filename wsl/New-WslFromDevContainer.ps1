@@ -20,7 +20,9 @@ param (
 
     [Parameter(Mandatory = $false)]
     [ValidateNotNullOrWhiteSpace()]
-    [string]$WslUserName = $Env:USERNAME,
+    [string]$NewUserName = $Env:USERNAME,
+    
+    [switch]$SkipUserNameChange=$false,
 
     [Parameter(Mandatory = $false)]
     [ValidateNotNullOrWhiteSpace()]
@@ -97,24 +99,40 @@ function Invoke-ContainerBuild {
     return $containerId
 }
 
+function Get-WslUserName {
+    param (
+        [string]$wslInstanceName
+    )
+
+    # Devcontainers create a user name with user id of 1000. The default user name is 'vscode', but it can be changed
+    # in the dev container configuration, so it needs to be retrieved from the WSL instance.
+    return wsl --distribution $wslInstanceName -- id -nu 1000
+}
+
 function Set-UserAccount {
     param (
         [string]$wslInstanceName,
-        [string]$wslUserName
+        [string]$OldUserName,
+        [string]$NewUserName
     )
-    wsl --distribution $wslInstanceName -- usermod --login $wslUserName vscode
-    wsl --distribution $wslInstanceName -- usermod --home /home/$wslUserName -m $wslUserName
-    wsl --distribution $wslInstanceName -- groupmod --new-name $wslUserName vscode
+    wsl --distribution $wslInstanceName -- usermod --login $NewUserName $OldUserName
+    wsl --distribution $wslInstanceName -- usermod --home /home/$NewUserName -m $NewUserName
+    wsl --distribution $wslInstanceName -- groupmod --new-name $NewUserName $OldUserName
+    
+    # Dev containers use sudoers.d files to grant sudo permissions to the user without requiring a password
+    # This makes the behavior of the WSL instance consistent with the dev container.
+    wsl --distribution $wslInstanceName -- mv /etc/sudoers.d/$OldUserName /etc/sudoers.d/$NewUserName
+    wsl --distribution $wslInstanceName -- sed -i "s/$OldUserName/$NewUserName/g" /etc/sudoers.d/$NewUserName
 }
 
 function New-WslConfigFile {
     param (
         [string]$wslInstanceName,
-        [string]$wslUserName
+        [string]$UserName
     )
 
     Write-Verbose -Message "Writing /etc/wsl.conf in $wslInstanceName..."
-    $configFileText = "[boot]`nsystemd=false`n`n[user]`ndefault=$wslUserName`n"
+    $configFileText = "[boot]`nsystemd=false`n`n[user]`ndefault=$UserName`n"
     $wslCommand = "echo '$configFileText' > /etc/wsl.conf"
     wsl -d $wslInstanceName -- bash -c "$wslCommand" | Write-Verbose
     wsl --terminate $wslInstanceName | Write-Verbose
@@ -178,5 +196,12 @@ $containerId = Invoke-ContainerBuild `
 $WslInstanceName = Get-WslInstanceName -wslInstanceName $WslInstanceName -containerName $containerName
 $wslInstancePath = Get-WslInstanceFilePath -wslInstanceName $WslInstanceName -wslInstancesFolder $WslInstancesFolder
 New-WslInstanceFromContainer -containerId $containerId -wslInstanceName $WslInstanceName -wslInstancePath $wslInstancePath
-Set-UserAccount -wslInstanceName $WslInstanceName -wslUserName $WslUserName
-New-WslConfigFile -wslInstanceName $WslInstanceName -wslUserName $WslUserName
+
+if($SkipUserNameChange) {
+    $userName = Get-WslUserName -wslInstanceName $WslInstanceName
+    New-WslConfigFile -wslInstanceName $WslInstanceName -UserName $userName
+} else {
+    $oldUserName = Get-WslUserName -wslInstanceName $WslInstanceName
+    Set-UserAccount -wslInstanceName $WslInstanceName -OldUserName $oldUserName -NewUserName $NewUserName
+    New-WslConfigFile -wslInstanceName $WslInstanceName -UserName $NewUserName
+}
