@@ -3,9 +3,29 @@
 Creates a WSL instance from a dev container specification.
 
 .DESCRIPTION
-ToDo: Describe the purpose of this script.
-ToDo: Describe the parameters of this script.
-#>
+Automates the creation of a Windows Subsystem for Linux (WSL) instance using a development container specification.
+It builds the container image from the dev container specification, runs the container, and then exports the container to a WSL instance.
+WSL, Docker Desktop, and the devcontainer CLI must be installed before running this script.
+
+.PARAMETER WorkspaceFolder
+The path to the workspace folder containing the devcontainer.json file. Defaults to the current directory.
+
+.PARAMETER DevContainerJsonPath
+The path to the devcontainer.json file. If not provided, the script will search for the file in the workspace folder.
+
+.PARAMETER WslInstanceName
+The name of the WSL instance. If not provided, it will use the container name.
+
+.PARAMETER NewUserName
+The new user name for the WSL instance. Defaults to the current user name.
+
+.PARAMETER SkipUserNameChange
+If specified, the script will not change the user name in the WSL instance and will use the default user name from
+the dev container, which is typically 'vscode'.
+
+.PARAMETER WslInstancesFolder
+The path to the folder where the WSL instances are stored. Defaults to the user's profile folder.
+#>  
 
 [CmdletBinding()]
 param (
@@ -22,7 +42,7 @@ param (
     [ValidateNotNullOrWhiteSpace()]
     [string]$NewUserName = $Env:USERNAME,
     
-    [switch]$SkipUserNameChange=$false,
+    [switch]$SkipUserNameChange = $false,
 
     [Parameter(Mandatory = $false)]
     [ValidateNotNullOrWhiteSpace()]
@@ -84,7 +104,7 @@ function Invoke-ContainerBuild {
 
     # Build the dev container
     devcontainer build --workspace-folder="$workspaceFolder" --config="$devContainerJsonPath" --image-name="$containerLabel" `
-        | Write-Verbose
+    | Write-Verbose
 
     # Run the dev container - the container will not run in wsl unless exported from a container instance instead of an image
     Write-Verbose -Message "Running the container image $containerLabel..."
@@ -184,6 +204,32 @@ function New-WslInstanceFromContainer {
     docker rm $containerId --force --volumes | Write-Verbose
 }
 
+function Test-Command {
+    param(
+        [string]$commandName
+    )
+    try {
+        $devContainerCli = Get-Command -Name $commandName -ErrorAction Stop
+        Write-Verbose -Message "$commandName is installed: $($devContainerCli.Path)"
+    }
+    catch {
+        throw "$commandName is not installed. Please install it before running this script."
+    }
+}
+
+function Test-DockerDaemon {
+    $errorOutput = & cmd.exe /c "docker ps 2>&1"
+    if ($LASTEXITCODE -ne 0) {
+        throw "Docker is not accessible. $errorOutput"
+    }
+    Write-Verbose -Message "Docker daemon is accessible."
+}
+
+Test-Command -commandName "devcontainer"
+Test-Command -commandName "docker"
+Test-Command -commandName "wsl"
+Test-DockerDaemon
+
 $DevContainerJsonPath = Find-DevContainerJsonFile -workspaceFolder $WorkspaceFolder -devContainerJsonPath $DevContainerJsonPath
 $containerName = Get-DevContainerName -devContainerJsonPath $DevContainerJsonPath
 $containerLabel = $containerName.ToLower()
@@ -197,10 +243,11 @@ $WslInstanceName = Get-WslInstanceName -wslInstanceName $WslInstanceName -contai
 $wslInstancePath = Get-WslInstanceFilePath -wslInstanceName $WslInstanceName -wslInstancesFolder $WslInstancesFolder
 New-WslInstanceFromContainer -containerId $containerId -wslInstanceName $WslInstanceName -wslInstancePath $wslInstancePath
 
-if($SkipUserNameChange) {
+if ($SkipUserNameChange) {
     $userName = Get-WslUserName -wslInstanceName $WslInstanceName
     New-WslConfigFile -wslInstanceName $WslInstanceName -UserName $userName
-} else {
+}
+else {
     $oldUserName = Get-WslUserName -wslInstanceName $WslInstanceName
     Set-UserAccount -wslInstanceName $WslInstanceName -OldUserName $oldUserName -NewUserName $NewUserName
     New-WslConfigFile -wslInstanceName $WslInstanceName -UserName $NewUserName
