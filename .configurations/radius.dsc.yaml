@@ -1,6 +1,16 @@
 # yaml-language-server: $schema=https://aka.ms/configuration-dsc-schema/0.2
 properties:
+  configurationVersion: 0.2.0
   resources:
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: node-js
+      directives:
+        allowPrerelease: true
+      settings:
+        id: "OpenJS.NodeJS.LTS"
+        source: winget
+
     - resource: Microsoft.WinGet.DSC/WinGetPackage
       id: windows-terminal
       directives:
@@ -75,5 +85,5 @@ properties:
         id: "Docker.DockerDesktop"
         source: winget
 
-  configurationVersion: 0.2.0
+
   
