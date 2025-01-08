@@ -14,6 +14,8 @@ Contents:
 - WSL setup script (for Radius)
 - WSL configuration for git
 
+`.devcontainer` folder: dev container definitions for testing Radius scenarios 
+
 ## Prerequisites
 
 Windows 11 with:
