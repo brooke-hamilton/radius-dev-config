@@ -58,7 +58,7 @@ properties:
       settings:
         ProductId: "Microsoft.VisualStudio.Product.Enterprise"
         ChannelId: "VisualStudio.17.Release"
-        VSConfigFile: ".vsconfig"
+        VSConfigFile: "${WinGetConfigRoot}\\.vsconfig"
 
     - resource: Microsoft.WinGet.DSC/WinGetPackage
       id: wsl
