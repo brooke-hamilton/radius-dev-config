@@ -1,14 +1,16 @@
 # Configuration Settings for Developing Radius on Windows/WSL
 
-This repo contains general dev machine setup resources for developing [Radius](https://github.com/radius-project/) on Windows. For the sake of having an example (and for my personal convenience), it also contains settings that are my preferences for machine setup, like personalization settings and task bar options.
+This repo contains general dev machine setup resources for developing [Radius](https://github.com/radius-project/) on Windows.
 
 Contents:
 
 `.configurations` folder:
-- WinGet DSC configurations (for Radius)
-- WinGet DSC configurations for personal settings (example)
+
+- WinGet DSC configurations for Radius
+- Visual Studio 2022 workload configuration as a `.vsconfig` file
 
 `wsl` folder:
+
 - WSL setup script (for Radius)
 - WSL configuration for git
 
