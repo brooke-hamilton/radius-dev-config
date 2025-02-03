@@ -1,9 +1,0 @@
-# This file is used to configure Windows settings for WSL 2. It is placed in Windows at %userprofile%\.wslconfig.
-# See https://learn.microsoft.com/en-us/windows/wsl/wsl-config#wslconfig
-# For syntax highlighting in VS Code, change the language mode to "ini" file.
-[wsl2]
-
-memory=48GB
-
-# https://github.com/microsoft/WSL/issues/11980#issuecomment-2412350798
-networkingMode=virtioProxy

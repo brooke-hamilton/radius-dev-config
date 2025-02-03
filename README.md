@@ -9,12 +9,7 @@ Contents:
 - WinGet DSC configurations for Radius
 - Visual Studio 2022 workload configuration as a `.vsconfig` file
 
-`wsl` folder:
-
-- WSL setup script (for Radius)
-- WSL configuration for git
-
-`.devcontainer` folder: dev container definitions for testing Radius scenarios 
+`.devcontainer` folder: dev container definitions for testing Radius scenarios
 
 ## Prerequisites
 
@@ -22,8 +17,6 @@ Windows 11 with:
 
 - `winget`
 - Windows Terminal
-
-Optional: I also enable Windows Sandbox, which makes testing `winget` configuration easy.
 
 ## Step-By-Step
 
