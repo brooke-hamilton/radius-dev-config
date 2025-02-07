@@ -1,6 +1,6 @@
 # Configuration Settings for Developing Radius on Windows/WSL
 
-This repo contains general dev machine setup resources for developing [Radius](https://github.com/radius-project/) on Windows.
+This repo contains general dev machine setup resources for developing [Radius](https://github.com/radius-project/) on Windows 11.
 
 Contents:
 
@@ -23,4 +23,3 @@ Windows 11 with:
 1. Provision a new vitrual machine with Windows 11.
 1. Open Windows Terminal as administrator and run `.\.configurations\Set-WingetConfiguration`
 1. Reboot (Required for WSl and Docker Desktop)
-1. Launch WSL Ubuntu and run these two scripts: `.\wsl\wsl-setup.sh`, `.wsl\wsl-configure-git.sh`
