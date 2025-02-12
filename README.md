@@ -20,7 +20,7 @@ Windows 11 with:
 
 ## Step-By-Step
 
-1. Provision a new vitrual machine with Windows 11.
+1. Provision a new virtual machine with Windows 11.
 1. Open Windows Terminal as administrator and run `.\.configurations\Set-WingetConfiguration`
-1. Reboot (Required for WSl and Docker Desktop)
+1. Reboot (Required for WSL and Docker Desktop)
 1. Launch WSL Ubuntu and run these two scripts: `.\wsl\wsl-setup.sh`, `.wsl\wsl-configure-git.sh`
