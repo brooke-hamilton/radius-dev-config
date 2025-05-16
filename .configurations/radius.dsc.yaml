@@ -85,5 +85,11 @@ properties:
         id: "Docker.DockerDesktop"
         source: winget
 
-
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: headlamp
+      directives:
+        allowPrerelease: true
+      settings:
+        id: "Headlamp.Headlamp"
+        source: winget
   
