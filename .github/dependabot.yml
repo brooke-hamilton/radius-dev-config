@@ -1,124 +1,36 @@
-# Dependabot configuration for radius-dev-config
-# This file configures Dependabot to automatically create pull requests for dependency updates
-
 version: 2
 updates:
-  # Monitor GitHub Actions workflows for action version updates
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
-      day: "monday"
-      time: "06:00"
-    open-pull-requests-limit: 10
-    reviewers:
-      - "@brooke-hamilton"
-    labels:
-      - "dependencies"
-      - "github-actions"
-    commit-message:
-      prefix: "chore"
-      include: "scope"
 
-  # Monitor Docker images in devcontainer configurations
   - package-ecosystem: "docker"
     directory: "/.devcontainer/aks"
     schedule:
       interval: "weekly"
-      day: "monday"
-      time: "06:00"
-    open-pull-requests-limit: 5
-    reviewers:
-      - "@brooke-hamilton"
-    labels:
-      - "dependencies"
-      - "devcontainer"
-      - "docker"
-    commit-message:
-      prefix: "chore"
-      include: "scope"
 
   - package-ecosystem: "docker"
     directory: "/.devcontainer/aks_auto"
     schedule:
       interval: "weekly"
-      day: "monday"
-      time: "06:00"
-    open-pull-requests-limit: 5
-    reviewers:
-      - "@brooke-hamilton"
-    labels:
-      - "dependencies"
-      - "devcontainer"
-      - "docker"
-    commit-message:
-      prefix: "chore"
-      include: "scope"
 
   - package-ecosystem: "docker"
     directory: "/.devcontainer/backstage"
     schedule:
       interval: "weekly"
-      day: "monday"
-      time: "06:00"
-    open-pull-requests-limit: 5
-    reviewers:
-      - "@brooke-hamilton"
-    labels:
-      - "dependencies"
-      - "devcontainer"
-      - "docker"
-    commit-message:
-      prefix: "chore"
-      include: "scope"
 
   - package-ecosystem: "docker"
     directory: "/.devcontainer/flux"
     schedule:
       interval: "weekly"
-      day: "monday"
-      time: "06:00"
-    open-pull-requests-limit: 5
-    reviewers:
-      - "@brooke-hamilton"
-    labels:
-      - "dependencies"
-      - "devcontainer"
-      - "docker"
-    commit-message:
-      prefix: "chore"
-      include: "scope"
 
   - package-ecosystem: "docker"
     directory: "/.devcontainer/k3d"
     schedule:
       interval: "weekly"
-      day: "monday"
-      time: "06:00"
-    open-pull-requests-limit: 5
-    reviewers:
-      - "@brooke-hamilton"
-    labels:
-      - "dependencies"
-      - "devcontainer"
-      - "docker"
-    commit-message:
-      prefix: "chore"
-      include: "scope"
 
   - package-ecosystem: "docker"
     directory: "/.devcontainer/kind"
     schedule:
       interval: "weekly"
-      day: "monday"
-      time: "06:00"
-    open-pull-requests-limit: 5
-    reviewers:
-      - "@brooke-hamilton"
-    labels:
-      - "dependencies"
-      - "devcontainer"
-      - "docker"
-    commit-message:
-      prefix: "chore"
-      include: "scope"
