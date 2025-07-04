@@ -35,5 +35,3 @@ jobs:
           push: always
           imageTag: |
             latest
-            ${{ github.run_number }}
-            weekly-${{ github.run_number }}
