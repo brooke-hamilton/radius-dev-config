@@ -1,6 +1,6 @@
 name: Build Radius Dev Container
 
-on:
+"on":
   schedule:
     # Run weekly on Sundays at 2 AM UTC
     - cron: '0 2 * * 0'
