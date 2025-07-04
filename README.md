@@ -32,6 +32,7 @@ graph
 
 - `.configurations` folder: DSC configurations (that are applied to the machine using `winget`).
 - `.devcontainer` folder: dev container definitions for testing Radius scenarios
+- `.github/workflows` folder: GitHub Actions workflows for automating Radius development tasks
 
 ## Prerequisites
 
@@ -70,3 +71,19 @@ Dev Containers: Rebuild and Reopen in Container
 ```
 
 The first dev container build will take some time.
+
+## Automated Workflows
+
+This repository includes GitHub Actions workflows that automatically build and publish development containers:
+
+### Weekly Radius Dev Container Build
+
+A GitHub workflow (`build-radius-devcontainer.yml`) runs weekly to:
+- Build the latest Radius dev container from the [radius-project/radius](https://github.com/radius-project/radius) repository
+- Publish the container image to GitHub Container Registry (ghcr.io)
+- Make the latest Radius development environment available as a pre-built container
+
+The workflow runs every Sunday at 2 AM UTC and can also be triggered manually. Built containers are available at:
+- `ghcr.io/[owner]/radius-dev:latest`
+- `ghcr.io/[owner]/radius-dev:[run_number]`
+- `ghcr.io/[owner]/radius-dev:weekly-[run_number]`
