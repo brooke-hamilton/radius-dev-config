@@ -6,6 +6,36 @@ updates:
       interval: "weekly"
 
   - package-ecosystem: "devcontainers"
-    directory: "/"
+    directory: "/.devcontainer/aks"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "devcontainers"
+    directory: "/.devcontainer/aks_auto"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "devcontainers"
+    directory: "/.devcontainer/backstage"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "devcontainers"
+    directory: "/.devcontainer/flux"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "devcontainers"
+    directory: "/.devcontainer/k3d"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "devcontainers"
+    directory: "/.devcontainer/kind"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "devcontainers"
+    directory: "/.devcontainer/radius-dev"
     schedule:
       interval: "weekly"
