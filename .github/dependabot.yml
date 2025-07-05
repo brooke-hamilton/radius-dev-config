@@ -5,32 +5,7 @@ updates:
     schedule:
       interval: "weekly"
 
-  - package-ecosystem: "docker"
-    directory: "/.devcontainer/aks"
-    schedule:
-      interval: "weekly"
-
-  - package-ecosystem: "docker"
-    directory: "/.devcontainer/aks_auto"
-    schedule:
-      interval: "weekly"
-
-  - package-ecosystem: "docker"
-    directory: "/.devcontainer/backstage"
-    schedule:
-      interval: "weekly"
-
-  - package-ecosystem: "docker"
-    directory: "/.devcontainer/flux"
-    schedule:
-      interval: "weekly"
-
-  - package-ecosystem: "docker"
-    directory: "/.devcontainer/k3d"
-    schedule:
-      interval: "weekly"
-
-  - package-ecosystem: "docker"
-    directory: "/.devcontainer/kind"
+  - package-ecosystem: "devcontainers"
+    directory: "/"
     schedule:
       interval: "weekly"
