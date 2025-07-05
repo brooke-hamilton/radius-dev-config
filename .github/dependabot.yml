@@ -6,7 +6,7 @@ updates:
       interval: "weekly"
 
   - package-ecosystem: "devcontainers"
-    directory: "/.devcontainer/aks"
+    directory: "/.devcontainer/aks/devcontainer.json"
     schedule:
       interval: "weekly"
 
