@@ -1,0 +1,70 @@
+name: Check Main Branch Status
+
+on:
+  schedule:
+    # Check weekly on Mondays at 8 AM UTC
+    - cron: '0 8 * * 1'
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  check-main-branch:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    
+    steps:
+      - name: Checkout radius-project/radius main branch
+        uses: actions/checkout@v4
+        with:
+          repository: radius-project/radius
+          ref: main
+          
+      - name: Test Build Dev Container
+        continue-on-error: true
+        id: test-build
+        uses: devcontainers/ci@v0.3
+        with:
+          imageName: test-radius-dev
+          push: never
+          
+      - name: Check if build succeeded
+        if: steps.test-build.outcome == 'success'
+        run: |
+          echo "Main branch build succeeded! The gnostic-models issue may be resolved."
+          echo "Consider updating the pinned commit in build-radius-devcontainer.yml"
+          echo "See .github/PINNED_COMMIT.md for instructions on how to update."
+          
+      - name: Create issue if main branch works
+        if: steps.test-build.outcome == 'success'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'Main branch build is working - consider updating pinned commit',
+              body: `🎉 The weekly check found that the main branch of radius-project/radius is now building successfully!
+
+            This means the gnostic-models issue may be resolved and we can consider updating our pinned commit.
+
+            ## Next Steps:
+            1. Verify the fix by testing the dev container functionality
+            2. Update the workflow to use \`ref: main\` instead of the pinned commit
+            3. Update documentation to remove pinning references
+            4. Close the related issue: https://github.com/radius-project/radius/issues/9948
+
+            See \`.github/PINNED_COMMIT.md\` for detailed instructions.
+
+            **Current pinned commit**: ba46c2d872bcb8b8dfb9ea3b31bfd4c92f1021f2
+            **Test date**: ${new Date().toISOString()}`,
+              labels: ['maintenance', 'dev-container']
+            });
+            
+            console.log('Created issue:', issue.data.html_url);
+            
+      - name: Log build failure (expected)
+        if: steps.test-build.outcome == 'failure'
+        run: |
+          echo "Main branch build still failing (expected). Continuing to use pinned commit."
+          echo "This is normal until the gnostic-models issue is resolved upstream."
