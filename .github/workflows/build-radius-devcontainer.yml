@@ -14,6 +14,8 @@ jobs:
       packages: write
     
     steps:
+      # Use a specific commit to avoid build issues caused by gnostic-models v0.7.0 breaking changes
+      # This commit is from before the dependency update on July 3, 2025 that introduced the issue
       - name: Checkout radius-project/radius
         uses: actions/checkout@v4
         with:
@@ -35,3 +37,4 @@ jobs:
           push: always
           imageTag: |
             latest
+            commit-ba46c2d8

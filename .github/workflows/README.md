@@ -11,9 +11,12 @@ This workflow builds and publishes the Radius development container from the [ra
 - Can be triggered manually via workflow_dispatch
 
 ### What it does
-1. Checks out the radius-project/radius repository
+1. Checks out the radius-project/radius repository (pinned to a specific commit to avoid build issues)
 2. Builds the dev container using the devcontainer CLI
 3. Publishes the container image to GitHub Container Registry (ghcr.io)
+
+### Commit Pinning
+The workflow is currently pinned to commit `ba46c2d872bcb8b8dfb9ea3b31bfd4c92f1021f2` to avoid build issues caused by breaking changes in dependencies (specifically gnostic-models v0.7.0). This commit is from before the problematic dependency update on July 3, 2025.
 
 ### Container Registry
 The built container is published to:
