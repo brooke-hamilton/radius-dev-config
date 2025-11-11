@@ -13,7 +13,7 @@
       "moby": true
     },
     "ghcr.io/dapr/cli/dapr-cli:0": {},
-    "../features/radius": {}
+    "ghcr.io/radius-project/devcontainer-features/radcli:latest": {}
   },
   "customizations": {
     "vscode": {
@@ -23,7 +23,6 @@
         "davidanson.vscode-markdownlint",
         "ms-azuretools.vscode-bicep",
         "ms-kubernetes-tools.vscode-kubernetes-tools",
-        "ms-azuretools.vscode-dapr",
         "redhat.vscode-yaml",
         "timonwong.shellcheck"
       ]

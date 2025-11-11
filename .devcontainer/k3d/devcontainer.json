@@ -12,8 +12,7 @@
 			"minikube": "none"
 		},
 		"ghcr.io/rio/features/k3d:1": {},
-		"ghcr.io/dapr/cli/dapr-cli:0": {},
-		"../features/radius": {}
+		"ghcr.io/dapr/cli/dapr-cli:0": {}
 	},
 	"customizations": {
 		"vscode": {
@@ -23,7 +22,6 @@
 				"inercia.vscode-k3d",
 				"ms-azuretools.vscode-bicep",
 				"ms-kubernetes-tools.vscode-kubernetes-tools",
-				"ms-azuretools.vscode-dapr",
 				"ms-azuretools.vscode-docker",
 				"redhat.vscode-yaml"
 			]

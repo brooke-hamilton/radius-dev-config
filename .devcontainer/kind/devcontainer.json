@@ -9,11 +9,12 @@
 		},
 		"ghcr.io/devcontainers/features/github-cli:1": {},
 		"ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
-			"minikube": "none"
+			"minikube": "none",
+			"helm": "3.19.0"
 		},
 		"ghcr.io/mpriscella/features/kind:1": {},
 		"ghcr.io/dapr/cli/dapr-cli:0": {},
-		"../features/radius": {}
+		"ghcr.io/radius-project/devcontainer-features/radcli:latest": {}
 	},
 	"customizations": {
 		"vscode": {
@@ -22,7 +23,6 @@
 				"github.vscode-github-actions",
 				"ms-azuretools.vscode-bicep",
 				"ms-kubernetes-tools.vscode-kubernetes-tools",
-				"ms-azuretools.vscode-dapr",
 				"ms-azuretools.vscode-docker",
 				"redhat.vscode-yaml"
 			]

@@ -1,7 +1,0 @@
-{
-    "id": "radius",
-    "version": "1.0.0",
-    "name": "Radius",
-    "description": "Installs the Radius server and client tools.",
-    "options": {}
-}
