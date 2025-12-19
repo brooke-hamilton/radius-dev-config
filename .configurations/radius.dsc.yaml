@@ -36,6 +36,14 @@ properties:
         source: winget
 
     - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: dotnetsdk-10
+      directives:
+        allowPrerelease: true
+      settings:
+        id: "Microsoft.DotNet.SDK.10"
+        source: winget
+
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
       id: visual-studio-enterprise-2022
       directives:
         allowPrerelease: true
@@ -51,23 +59,6 @@ properties:
         ProductId: "Microsoft.VisualStudio.Product.Enterprise"
         ChannelId: "VisualStudio.17.Release"
         VSConfigFile: "${WinGetConfigRoot}\\.vsconfig"
-
-    - resource: Microsoft.WinGet.DSC/WinGetPackage
-      id: wsl
-      directives:
-        allowPrerelease: true
-      settings:
-        id: "Microsoft.WSL"
-        source: winget
-
-    - resource: Microsoft.WinGet.DSC/WinGetPackage
-      id: ubuntu
-      directives:
-        description:  ubuntu
-        allowPrerelease: true
-      settings:
-        id: "9PDXGNCFSCZV"
-        source: msstore
 
     - resource: Microsoft.WinGet.DSC/WinGetPackage
       id: docker-desktop
