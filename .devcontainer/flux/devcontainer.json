@@ -8,7 +8,7 @@
 		"ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
 			"minikube": "none"
 		},
-		"ghcr.io/devcontainers/features/docker-in-docker:3": {
+		"ghcr.io/devcontainers/features/docker-in-docker:4": {
 			"version": "latest",
 			"moby": true
 		},
